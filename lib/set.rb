@@ -625,7 +625,7 @@ class Set
   #     Set[1, 2, 3] | Set[2, 4, 5]         #=> #<Set: {1, 2, 3, 4, 5}>
   #     Set[1, 5, 'z'] | (1..6)             #=> #<Set: {1, 5, "z", 2, 3, 4, 6}>
   def |(enum)
-    dup.merge(enum)
+    dup.rehash.merge(enum)
   end
   alias + |
   alias union |
@@ -694,6 +694,12 @@ class Set
   def hash      # :nodoc:
     @hash.hash
   end
+
+  def rehash
+    @hash.rehash
+    self
+  end
+  protected :rehash
 
   def eql?(o)   # :nodoc:
     return false unless o.is_a?(Set)
